@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AdminFileStorage.Views.UserProfile"
+             BackgroundColor="#1E1E1E"
+            
+           >
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Данные профиля -->
+            <VerticalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Grid HorizontalOptions="Center" VerticalOptions="Center">
+
+                    <Image Source="ghost_avatar.png"
+                           HeightRequest="100"
+                           WidthRequest="100"
+                           Aspect="AspectFit"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Grid>
+
+                <Label x:Name="UsernameLabel"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto">
+                <Label Text="Данные пользователя"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="#A4A4A4"
+                       VerticalTextAlignment="Center"
+                       HorizontalOptions="StartAndExpand" />
+
+                <HorizontalStackLayout Spacing="-15" VerticalOptions="Center" HorizontalOptions="End">
+                    <ImageButton Source="edit_icon.png"
+                                 HeightRequest="20"
+                                 WidthRequest="20"
+                                 BackgroundColor="Transparent" />
+                    <Button Text="Изменить"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#A4A4A4"
+                            BackgroundColor="Transparent"
+                            VerticalOptions="Center"
+                            HorizontalOptions="End"
+                            Clicked="OnEditButtonClicked" />
+                </HorizontalStackLayout>
+            </Grid>
+
+            <VerticalStackLayout Spacing="15">
+                <Frame BackgroundColor="#2C2C2C" CornerRadius="20" Padding="15" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" Spacing="10">
+                        <!-- Иконка пользователя -->
+                        <Image Source="user_icon.png"
+                               WidthRequest="24"
+                               HeightRequest="24"
+                               VerticalOptions="Center" />
+                        <!-- Имя пользователя -->
+                        <Label Text="Username"
+                               TextColor="#A4A4A4"
+                               FontSize="14"
+                               VerticalOptions="Center"
+                               HorizontalOptions="StartAndExpand" />
+                        <Label x:Name="UsernameStaticLabel"
+                               TextColor="#FFFFFF"
+                               FontSize="14"
+                               Margin="0 ,0,10,0"  
+                               HorizontalOptions="End"
+                               HorizontalTextAlignment="End"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Frame>
+
+                <Frame BackgroundColor="#2C2C2C" CornerRadius="20" Padding="15" HasShadow="True">
+                    <HorizontalStackLayout VerticalOptions="Center" Spacing="10">
+                        <!-- Иконка email -->
+                        <Image Source="email_icon.png"
+                               WidthRequest="24"
+                               HeightRequest="24"
+                               VerticalOptions="Center" />
+                        <!-- Email пользователя -->
+                        <Label Text="Email"
+                               TextColor="#A4A4A4"
+                               FontSize="14"
+                               VerticalOptions="Center"
+                               HorizontalOptions="StartAndExpand" />
+                        <Label x:Name="EmailStaticLabel"
+                               TextColor="#FFFFFF"
+                               FontSize="14"
+                               Margin="0,0,10,0"  
+                               HorizontalOptions="End"
+                               HorizontalTextAlignment="End"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+
+            <!-- Файлы пользователя -->
+            <Label Text="Файлы пользователя"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   TextColor="#A4A4A4"
+                   Margin="0,30,0,0"
+                   HorizontalTextAlignment="Center" />
+
+            <HorizontalStackLayout x:Name="FilesContainer"
+                                   Spacing="10"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />
+
+            <Button Text="Показать все файлы"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    TextColor="#FFFFFF"
+                    BackgroundColor="#FF0055"
+                    CornerRadius="20"
+                    Padding="10"
+                    Margin="10"
+                    Clicked="OnShowAllFilesClicked" />
+            
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

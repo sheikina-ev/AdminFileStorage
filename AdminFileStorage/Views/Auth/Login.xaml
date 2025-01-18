@@ -1,0 +1,103 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AdminFileStorage.Views.Auth.Login"
+         
+             BackgroundColor="#1E1E1E">
+
+    <ScrollView>
+        <Grid Padding="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <!-- Отступ для логотипа -->
+                <RowDefinition Height="Auto" />
+                <!-- Логотип -->
+                <RowDefinition Height="Auto" />
+                <!-- Текст Вход в аккаунт -->
+                <RowDefinition Height="73" />
+                <!-- Отступ перед полями ввода -->
+                <RowDefinition Height="Auto" />
+                <!-- Поля ввода -->
+                <RowDefinition Height="Auto" />
+                <!-- Кнопка Вход -->
+                <RowDefinition Height="Auto" />
+                <!-- Ссылка на регистрацию -->
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Логотип -->
+            <Image Source="icon_placeholder.png"
+                   HeightRequest="80"
+                   HorizontalOptions="Center"
+                   Grid.Row="1" />
+
+            <!-- Текст Вход в аккаунт -->
+            <Label Text="Вход в аккаунт"
+                   FontSize="24"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Grid.Row="2"
+                   Margin="0,10,0,0" />
+
+            <!-- Поля для имени и пароля -->
+            <StackLayout Grid.Row="4" Spacing="15">
+                <!-- Поле Имя пользователя -->
+                <Frame BackgroundColor="#333333" CornerRadius="10" Padding="0" HasShadow="False" HeightRequest="50">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="user_icon.png"
+                               WidthRequest="20"
+                               HeightRequest="20"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center" 
+                               Grid.Column="0" />
+                        <Entry x:Name="UsernameEntry"
+                               Placeholder="Никнейм пользователя"
+                               PlaceholderColor="#888888"
+                               TextColor="White"
+                               Margin="0,0,10,0"
+                               Grid.Column="1" />
+                    </Grid>
+                </Frame>
+
+                <!-- Поле Пароль -->
+                <Frame BackgroundColor="#333333" CornerRadius="10" Padding="0" HasShadow="False" HeightRequest="50">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="password_icon.png"
+                               WidthRequest="20"
+                               HeightRequest="20"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center" 
+                               Grid.Column="0" />
+                        <Entry x:Name="PasswordEntry"
+                               Placeholder="Пароль"
+                               PlaceholderColor="#888888"
+                               TextColor="White"
+                               IsPassword="True"
+                               Margin="0,0,10,0"
+                               Grid.Column="1" />
+                    </Grid>
+                </Frame>
+            </StackLayout>
+
+            <!-- Кнопка входа -->
+            <Button Grid.Row="5"
+                    Text="Вход"
+                    BackgroundColor="#FF0055"
+                    TextColor="White"
+                    CornerRadius="25"
+                    HeightRequest="50"
+                    FontAttributes="Bold"
+                    Margin="0,20,0,0"
+                    Clicked="OnLoginButtonClicked" />
+
+        </Grid>
+    </ScrollView>
+</ContentPage>

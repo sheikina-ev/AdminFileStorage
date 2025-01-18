@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="AdminFileStorage.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:AdminFileStorage.Views"
+    xmlns:auth="clr-namespace:AdminFileStorage.Views.Auth"
+    Shell.FlyoutBehavior="Flyout"
+    BackgroundColor="#1E1E1E">
+
+    <ShellContent
+    
+    ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage"
+    Shell.FlyoutItemIsVisible="False" 
+    />
+
+    <ShellContent
+    ContentTemplate="{DataTemplate auth:Login}" Route="LoginPage"
+    Shell.FlyoutItemIsVisible="False" 
+  />
+
+
+    <ShellContent
+    Title="Поиск"
+    ContentTemplate="{DataTemplate local:SearchPage}" Route="SearchPage"
+    />
+    <ShellContent
+    Title="Права доступа"
+    ContentTemplate="{DataTemplate local:PermissionsPage}" Route="PermissionsPage"
+    />
+    <ShellContent
+    Title="Файлы"
+    ContentTemplate="{DataTemplate local:FilesPage}" Route="FilesPage"
+    />
+    <ShellContent
+    Title="Профиль"
+    ContentTemplate="{DataTemplate local:UserProfile}" Route="UserProfile"
+
+    />
+
+
+</Shell>
