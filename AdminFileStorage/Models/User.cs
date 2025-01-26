@@ -32,7 +32,7 @@ namespace AdminFileStorage.Models
         public string? Phone { get; set; } = null;
 
         [JsonPropertyName("token")]
-        public string Token { get; set; }
+        public static string Token { get; set; }
 
         [JsonPropertyName("role_id")]
         public ulong RoleId { get; set; }

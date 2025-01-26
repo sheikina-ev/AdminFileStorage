@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AdminFileStorage.Views.UserListPage"
+             Title="Список пользователей"
+             BackgroundColor="#1E1E1E">
+    <StackLayout Padding="20">
+        <ListView x:Name="UserListView"
+                  ItemsSource="{Binding Users}"
+                  HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" Padding="10">
+                            <Label Text="{Binding Name}" FontSize="18" TextColor="White" VerticalOptions="Center" />
+                            <Button Text="Просмотр"
+                                    CommandParameter="{Binding Id}"
+                                    Clicked="OnViewUserClicked"
+                                    BackgroundColor="#007ACC"
+                                    TextColor="White"
+                                    HorizontalOptions="EndAndExpand" />
+                            <Button Text="Удалить"
+                                    CommandParameter="{Binding Id}"
+                                    Clicked="OnDeleteUserClicked"
+                                    BackgroundColor="#FF0055"
+                                    TextColor="White"
+                                    HorizontalOptions="End" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

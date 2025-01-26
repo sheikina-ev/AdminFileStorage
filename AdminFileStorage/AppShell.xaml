@@ -37,6 +37,10 @@
     ContentTemplate="{DataTemplate local:UserProfile}" Route="UserProfile"
 
     />
-
+    <ShellContent
+      Title="Пользователи"
+      ContentTemplate="{DataTemplate local:UserListPage}" Route="UserListPage"
+    
+  />
 
 </Shell>
