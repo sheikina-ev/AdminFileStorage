@@ -106,7 +106,7 @@ namespace AdminFileStorage.Views
         }
 
 
-        // Поиск файлов у текущего пользователя
+        // Поиск файлов по названию
         private async void OnSearchFileButtonClicked(object sender, EventArgs e)
         {
             try
@@ -139,34 +139,51 @@ namespace AdminFileStorage.Views
                     // Десериализация ответа
                     var result = JsonSerializer.Deserialize<Dictionary<string, List<File>>>(responseContent);
 
+                    // Очищаем StackLayout перед добавлением новых файлов
+                    FilesStackLayout.Children.Clear();
+
                     if (result != null && result.TryGetValue("files", out var files) && files.Count > 0)
                     {
-                        // Очистка текущего списка и добавление новых файлов
-                        Files.Clear();
                         foreach (var file in files)
                         {
-                            Files.Add(file);
+                            // Создаем новый Label для каждого найденного файла
+                            var fileLabel = new Label
+                            {
+                                Text = $"{file.Name}.{file.Extension}",
+
+                                TextColor = Colors.White,
+                                FontSize = 18,
+                                Margin = new Thickness(0, 5)
+                            };
+
+                            // Добавляем Label в StackLayout
+                            FilesStackLayout.Children.Add(fileLabel);
                         }
                     }
                     else
                     {
-                        await DisplayAlert("Результаты поиска", "Файлы не найдены.", "OK");
+                        // Добавляем сообщение, что файлы не найдены
+                        var noFilesLabel = new Label
+                        {
+                            Text = "Файлы не найдены.",
+                            TextColor = Colors.White,
+                            FontSize = 18,
+                            Margin = new Thickness(0, 5)
+                        };
+
+                        FilesStackLayout.Children.Add(noFilesLabel);
                     }
                 }
                 else
                 {
-                    // Логирование ошибки, если запрос не удался
-                    await DisplayAlert("Ошибка", $"API вернул ошибку: {response.StatusCode}\n{responseContent}", "OK");
+                    await DisplayAlert("Ошибка", "Не удалось получить файлы.", "OK");
                 }
             }
             catch (Exception ex)
             {
-                // Обработка исключений
                 await DisplayAlert("Ошибка", $"Произошла ошибка: {ex.Message}", "OK");
             }
         }
-
-
 
     }
 }

@@ -19,28 +19,29 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextCell Text="{Binding Username}" TextColor="White"
-                          Detail="{Binding Email}" DetailColor="White"/>
+                              Detail="{Binding Email}" DetailColor="White"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-
-        <!-- Поле для поиска файлов -->
+        <!-- Поле для поиска файла -->
         <Entry x:Name="FileSearchEntry"
                Placeholder="Введите название файла"
                TextColor="Black"
-               BackgroundColor="White" />
+               BackgroundColor="White"
+               Margin="0,20,0,0"
+               HeightRequest="50"/>
+
+        <!-- Кнопка для поиска файлов -->
         <Button Text="Найти файлы"
                 Clicked="OnSearchFileButtonClicked"
                 BackgroundColor="#FF0055"
-                TextColor="White" />
-        <ListView ItemsSource="{Binding Files}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell Text="{Binding Name}" TextColor="White"
-                              Detail="{Binding Extension}" DetailColor="White" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                TextColor="White"
+                HeightRequest="50" />
+
+        <!-- StackLayout для отображения найденных файлов -->
+        <StackLayout x:Name="FilesStackLayout" Padding="10, 20, 10, 10">
+            <!-- Здесь будут динамически добавляться метки для файлов -->
+        </StackLayout>
     </StackLayout>
 </ContentPage>
