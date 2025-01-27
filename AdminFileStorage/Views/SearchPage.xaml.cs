@@ -146,6 +146,7 @@ namespace AdminFileStorage.Views
                     {
                         foreach (var file in files)
                         {
+                            Console.WriteLine("files", files);
                             // Создаем новый Label для каждого найденного файла
                             var fileLabel = new Label
                             {
