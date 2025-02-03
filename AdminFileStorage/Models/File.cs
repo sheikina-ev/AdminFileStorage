@@ -26,5 +26,11 @@ namespace AdminFileStorage.Models
 
         [JsonPropertyName("created_at")]
         public DateTime? CreatedAt { get; set; }
+
+        [JsonPropertyName("user_id")]
+        public int UserId { get; set; }   
+
+
+
     }
 }

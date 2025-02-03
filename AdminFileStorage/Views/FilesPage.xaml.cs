@@ -10,31 +10,24 @@ using System.Net.Http.Headers;
 using File = AdminFileStorage.Models.File;
 using Newtonsoft.Json;
 using AdminFileStorage.Utils;
+using FIleStorage.Models;
 
 namespace AdminFileStorage.Views
 {
     public partial class FilesPage : ContentPage
     {
-        private readonly User _user;
-        private readonly string _token;
-        private readonly HttpClient _httpClient;
         private readonly UserService _userService;
-
-        public ObservableCollection<File> Files { get; set; } = new ObservableCollection<File>();
-
-        public bool HasNoFiles => !Files.Any();
+        private readonly HttpClient _httpClient;
+        private readonly string _token;
 
         public FilesPage()
         {
             InitializeComponent();
-            _user = UserData.User; // Получаем данные о пользователе из UserData
-            _token = UserData.Token; // Получаем токен
-
+            _token = UserData.Token;
             _httpClient = new HttpClient();
             _userService = new UserService(_httpClient, _token);
 
-            BindingContext = this; // Устанавливаем контекст данных
-            LoadUserFiles();       // Загружаем файлы пользователя
+            LoadUserFiles();
         }
 
         private async void LoadUserFiles()
@@ -42,74 +35,67 @@ namespace AdminFileStorage.Views
             try
             {
                 var files = await _userService.GetUserFilesAsync();
-
-                Files.Clear();
-                foreach (var file in files)
-                {
-                    Files.Add(file);
-                }
-
-                OnPropertyChanged(nameof(HasNoFiles)); // Уведомляем об изменении свойства
+                FilesCollectionView.ItemsSource = files;
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Ошибка", $"Произошла ошибка при загрузке файлов: {ex.Message}", "OK");
+                Console.WriteLine($"Ошибка загрузки файлов: {ex.Message}");
+                await DisplayAlert("Ошибка", "Не удалось загрузить файлы.", "OK");
             }
         }
 
-        // Метод для загрузки файла
-        public Command UploadFileCommand => new Command(async () =>
+        private async void OnFileSelected(object sender, SelectionChangedEventArgs e)
         {
-            var filePickerResult = await FilePicker.PickAsync(); // Используем FilePicker для выбора файла
-
-            if (filePickerResult != null)
+            if (e.CurrentSelection.FirstOrDefault() is File selectedFile)
             {
-                await UploadFileAsync(filePickerResult.FullPath); // Загружаем выбранный файл
+                await ShowFileDetails(selectedFile);
             }
-        });
+        }
 
-        // Метод загрузки файла
-        private async Task UploadFileAsync(string filePath)
+        private async Task ShowFileDetails(File file)
+        {
+            await DisplayAlert("Информация о файле",
+                $"Имя: {file.Name}\n" +
+                $"Расширение: {file.Extension}\n" +
+                $"Размер: {file.Size}\n" +
+                $"Путь: {file.Path}\n" +
+                $"Дата создания: {file.CreatedAt?.ToString("g") ?? "Не указана"}",
+                "OK");
+        }
+
+        private async void OnDeleteFileClicked(object sender, EventArgs e)
+        {
+            // Получаем объект файла из BindingContext кнопки
+            if (sender is Button button && button.BindingContext is File file)
+            {
+                bool confirm = await DisplayAlert("Удаление файла", $"Вы уверены, что хотите удалить {file.Name}?", "Да", "Нет");
+                if (confirm)
+                {
+                    await DeleteFile(file);
+                }
+            }
+        }
+
+        private async Task DeleteFile(File file)
         {
             try
             {
-                var content = new MultipartFormDataContent();
-                var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                var fileName = Path.GetFileName(filePath);
-
-                var fileContent = new StreamContent(fileStream);
-                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                bool success = await _userService.DeleteUserFileAsync(file.Id);
+                if (success)
                 {
-                    Name = "file",
-                    FileName = fileName
-                };
-
-                content.Add(fileContent);
-
-                var request = new HttpRequestMessage(HttpMethod.Post, "https://yourapi.com/files"); // Укажите правильный URL
-                request.Headers.Add("Authorization", $"Bearer {_token}");
-                request.Content = content;
-
-                var response = await _httpClient.SendAsync(request);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseBody = await response.Content.ReadAsStringAsync();
-                    var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
-                    await DisplayAlert("Success", "File successfully uploaded.", "OK");
-                    LoadUserFiles(); // Перезагружаем список файлов
+                    await DisplayAlert("Успех", "Файл успешно удален", "OK");
+                    LoadUserFiles();
                 }
                 else
                 {
-                    await DisplayAlert("Error", "Failed to upload the file.", "OK");
+                    await DisplayAlert("Ошибка", "Не удалось удалить файл", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"An error occurred while uploading the file: {ex.Message}", "OK");
+                Console.WriteLine($"Ошибка удаления файла: {ex.Message}");
+                await DisplayAlert("Ошибка", "Произошла ошибка при удалении файла", "OK");
             }
         }
-
-        // Дополнительные методы, такие как скачивание, редактирование и удаление файлов
     }
 }

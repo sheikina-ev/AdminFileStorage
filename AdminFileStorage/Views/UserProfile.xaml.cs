@@ -1,5 +1,7 @@
 using AdminFileStorage.Models;
 using AdminFileStorage.Utils;
+using FIleStorage.Models;
+
 
 
 // Добавляем псевдоним для класса File
@@ -16,7 +18,7 @@ namespace AdminFileStorage.Views
 
         public UserProfile()
         {
-            
+
             InitializeComponent();
 
 
@@ -78,8 +80,8 @@ namespace AdminFileStorage.Views
                     var fileButton = new ImageButton
                     {
                         Source = "file_icon.png",
-                        WidthRequest = 80,
-                        HeightRequest = 80,
+                        WidthRequest = 20,
+                        HeightRequest = 20,
                         BackgroundColor = Colors.Transparent,
                         HorizontalOptions = LayoutOptions.Center,
                         VerticalOptions = LayoutOptions.Center
@@ -159,7 +161,7 @@ namespace AdminFileStorage.Views
             await Shell.Current.GoToAsync("//filesPage");
         }
 
-      
+
 
 
     }

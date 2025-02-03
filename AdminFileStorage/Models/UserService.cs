@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using AdminFileStorage.Models;
 
 namespace AdminFileStorage.Models
 {
@@ -36,8 +36,59 @@ namespace AdminFileStorage.Models
                 return files;
             }
 
-            // Обработка ошибок
             throw new Exception("Failed to load user files");
+        }
+
+        public async Task<bool> DeleteUserFileAsync(int fileId)
+        {
+            try
+            {
+                var url = $"http://course-project-4/api/files/{fileId}";
+                var request = new HttpRequestMessage(HttpMethod.Delete, url);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+                HttpResponseMessage response = await _httpClient.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                Console.WriteLine($"Ошибка при удалении файла. Статус код: {response.StatusCode}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при удалении файла: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> UploadFileAsync(string filePath)
+        {
+            try
+            {
+                var fileBytes = System.IO.File.ReadAllBytes(filePath); 
+
+                var fileContent = new ByteArrayContent(fileBytes);
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+
+                var url = "http://course-project-4/api/files";
+                var request = new HttpRequestMessage(HttpMethod.Post, url)
+                {
+                    Content = fileContent
+                };
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+                HttpResponseMessage response = await _httpClient.SendAsync(request);
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при загрузке файла: {ex.Message}");
+                return false;
+            }
         }
     }
 }

@@ -12,14 +12,12 @@ namespace AdminFileStorage.Views
 {
     public partial class SearchPage : ContentPage
     {
-        private readonly User _currentUser; // Текущий пользователь
-        private readonly string _token;    // Токен авторизации
+        private readonly User _currentUser;
+        private readonly string _token;
         private readonly HttpClient _httpClient;
 
-        // Список пользователей для поиска
         public ObservableCollection<User> Users { get; set; } = new ObservableCollection<User>();
 
-        // Список файлов текущего пользователя
         public ObservableCollection<File> Files { get; set; } = new ObservableCollection<File>();
 
         public SearchPage()
@@ -30,10 +28,9 @@ namespace AdminFileStorage.Views
             _token = UserData.Token;
             _httpClient = new HttpClient();
 
-            BindingContext = this; // Устанавливаем контекст данных
+            BindingContext = this;
         }
 
-        // Поиск пользователей по имени
         private async void OnSearchButtonClicked(object sender, EventArgs e)
         {
             try
@@ -49,11 +46,9 @@ namespace AdminFileStorage.Views
                 var jsonContent = JsonSerializer.Serialize(requestBody);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                // Устанавливаем заголовок с токеном
                 _httpClient.DefaultRequestHeaders.Authorization =
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
 
-                // Запрос на поиск пользователя по имени
                 var response = await _httpClient.PostAsync("http://course-project-4/api/search/user", content);
 
                 if (response.IsSuccessStatusCode)
@@ -85,11 +80,11 @@ namespace AdminFileStorage.Views
                 await DisplayAlert("Ошибка", $"Произошла ошибка: {ex.Message}", "OK");
             }
         }
+
         private async void OnUserSelected(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem is User selectedUser)
             {
-                // Формируем строку с информацией о пользователе
                 var userInfo =
                     $"Фамилия: {selectedUser.Surname}\n" +
                     $"Имя: {selectedUser.Name}\n" +
@@ -97,21 +92,16 @@ namespace AdminFileStorage.Views
                     $"Email: {selectedUser.Email}\n" +
                     $"Телефон: {selectedUser.Phone}";
 
-                // Отображаем модальное окно
                 await DisplayAlert("Информация о пользователе", userInfo, "OK");
 
-                // Снимаем выделение
                 ((ListView)sender).SelectedItem = null;
             }
         }
 
-
-        // Поиск файлов по названию
         private async void OnSearchFileButtonClicked(object sender, EventArgs e)
         {
             try
             {
-                // Получаем введенное имя файла
                 var fileName = FileSearchEntry.Text?.Trim();
                 if (string.IsNullOrWhiteSpace(fileName))
                 {
@@ -119,60 +109,82 @@ namespace AdminFileStorage.Views
                     return;
                 }
 
-                // Подготовка тела запроса
                 var requestBody = new { name = fileName };
                 var jsonContent = JsonSerializer.Serialize(requestBody);
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                // Установка токена авторизации
                 _httpClient.DefaultRequestHeaders.Authorization =
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
 
-                // Выполнение POST-запроса
                 var response = await _httpClient.PostAsync($"http://course-project-4/api/search/file", content);
-
-                // Получение ответа
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Десериализация ответа
                     var result = JsonSerializer.Deserialize<Dictionary<string, List<File>>>(responseContent);
 
-                    // Очищаем StackLayout перед добавлением новых файлов
-                    FilesStackLayout.Children.Clear();
+                    // Очистка перед обновлением списка
+                    FilesFlexLayout.Children.Clear();
 
                     if (result != null && result.TryGetValue("files", out var files) && files.Count > 0)
                     {
                         foreach (var file in files)
                         {
-                            Console.WriteLine("files", files);
-                            // Создаем новый Label для каждого найденного файла
+                            Console.WriteLine($"Файл найден: {file.Name}.{file.Extension}");
+
+                            // Создаем контейнер для картинки и текста
+                            var fileContainer = new StackLayout
+                            {
+                                Orientation = StackOrientation.Vertical,    // Размещение элементов вертикально
+                                HorizontalOptions = LayoutOptions.Center,   // Центрируем контейнер
+                                VerticalOptions = LayoutOptions.Center,     // Центрируем контейнер
+                                Spacing = 5
+                            };
+
+                            // Добавление иконки файла
+                            var fileIcon = new Image
+                            {
+                                Source = "file_icon.png",
+                                WidthRequest = 50,
+                                HeightRequest = 50,
+                                BackgroundColor = Colors.Transparent,
+                                HorizontalOptions = LayoutOptions.Center,
+                                VerticalOptions = LayoutOptions.Center
+                            };
+
+                            // Добавление метки с названием файла
                             var fileLabel = new Label
                             {
                                 Text = $"{file.Name}.{file.Extension}",
-
                                 TextColor = Colors.White,
                                 FontSize = 18,
+                                HorizontalTextAlignment = TextAlignment.Center,
                                 Margin = new Thickness(0, 5)
                             };
 
-                            // Добавляем Label в StackLayout
-                            FilesStackLayout.Children.Add(fileLabel);
+                            // Добавление обработчика нажатия
+                            var tapGesture = new TapGestureRecognizer();
+                            tapGesture.Command = new Command(async (param) => await OnFileSelected(param as File));
+                            tapGesture.CommandParameter = file;
+                            fileLabel.GestureRecognizers.Add(tapGesture);
+
+                            // Добавление элементов в контейнер
+                            fileContainer.Children.Add(fileIcon);
+                            fileContainer.Children.Add(fileLabel);
+
+                            // Добавление контейнера в FlexLayout
+                            FilesFlexLayout.Children.Add(fileContainer);
                         }
                     }
                     else
                     {
-                        // Добавляем сообщение, что файлы не найдены
-                        var noFilesLabel = new Label
+                        FilesFlexLayout.Children.Add(new Label
                         {
                             Text = "Файлы не найдены.",
                             TextColor = Colors.White,
                             FontSize = 18,
-                            Margin = new Thickness(0, 5)
-                        };
-
-                        FilesStackLayout.Children.Add(noFilesLabel);
+                            HorizontalTextAlignment = TextAlignment.Center
+                        });
                     }
                 }
                 else
@@ -186,5 +198,21 @@ namespace AdminFileStorage.Views
             }
         }
 
+        private async Task OnFileSelected(File file)
+        {
+            if (file == null)
+            {
+                await DisplayAlert("Ошибка", "Не удалось загрузить информацию о файле.", "OK");
+                return;
+            }
+
+            await DisplayAlert("Информация о файле",
+                $"Имя: {file.Name}\n" +
+                $"Расширение: {file.Extension}\n" +
+                $"Размер: {file.Size}\n" +
+                $"Путь: {file.Path}\n" +
+                $"Дата создания: {file.CreatedAt?.ToString("g") ?? "Не указана"}",
+                "OK");
+        }
     }
 }

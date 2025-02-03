@@ -6,6 +6,7 @@
             
            >
 
+
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
 
@@ -38,8 +39,8 @@
 
                 <HorizontalStackLayout Spacing="-15" VerticalOptions="Center" HorizontalOptions="End">
                     <ImageButton Source="edit_icon.png"
-                                 HeightRequest="20"
-                                 WidthRequest="20"
+                                 HeightRequest="10"
+                                 WidthRequest="10"
                                  BackgroundColor="Transparent" />
                     <Button Text="Изменить"
                             FontSize="14"
@@ -93,7 +94,7 @@
                                TextColor="#FFFFFF"
                                FontSize="14"
                                Margin="0,0,10,0"  
-                               HorizontalOptions="End"
+                            HorizontalOptions="End"
                                HorizontalTextAlignment="End"
                                VerticalOptions="Center" />
                     </HorizontalStackLayout>
@@ -122,7 +123,8 @@
                     Padding="10"
                     Margin="10"
                     Clicked="OnShowAllFilesClicked" />
-            
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+

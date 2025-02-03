@@ -72,6 +72,52 @@
                     <Shadow Brush="Black" Opacity="0.3" Offset="2,2" Radius="3" />
                 </Button.Shadow>
             </Button>
+
+            <Label Text="Предоставленные права"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center" />
+
+            <!-- Список предоставленных прав -->
+            <ListView ItemsSource="{Binding PermsGiven}"
+                      BackgroundColor="#2C2C2C"
+                      SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10">
+                                <!-- Отображаем только FileId и UserId -->
+                                <Label Text="{Binding FileId}" TextColor="White" FontSize="16"/>
+                                <Label Text="{Binding UserId}" TextColor="Gray" FontSize="14"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Label Text="Полученные права"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center" />
+
+            <!-- Список полученных прав -->
+            <ListView ItemsSource="{Binding PermsReceived}"
+                      BackgroundColor="#2C2C2C"
+                      SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10">
+                                <!-- Отображаем только FileId и UserId -->
+                                <Label Text="{Binding FileId}" TextColor="White" FontSize="16"/>
+                                <Label Text="{Binding UserId}" TextColor="Gray" FontSize="14"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
