@@ -3,31 +3,56 @@
              x:Class="AdminFileStorage.Views.FilesPage"
              Title="Your Files"
              BackgroundColor="#1E1E1E">
+    <StackLayout Padding="20">
+        <Label Text="Ваши файлы"
+               FontSize="24"
+               TextColor="White"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               Margin="0,0,0,20" />
 
-    <StackLayout>
-        <CollectionView x:Name="FilesCollectionView" SelectionMode="Single" SelectionChanged="OnFileSelected">
+
+
+        <CollectionView x:Name="FilesCollectionView" SelectionMode="Single" SelectionChanged="OnFileSelected" >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="10" ColumnDefinitions="*, Auto">
+                    <Grid Padding="10" ColumnDefinitions="*, Auto, Auto">
                         <Label Text="{Binding Name}" 
-                            FontSize="16"
-                            TextColor="White"
-                            VerticalOptions="Center" />
+                               FontSize="16"
+                               TextColor="White"
+                               VerticalOptions="Center" />
+
+                        <Button Text="⬇ Скачать"
+                                FontSize="14"
+                                BackgroundColor="Transparent"
+                                TextColor="LightBlue"
+                                CommandParameter="{Binding .}"
+                                Clicked="OnDownloadFileClicked"
+                                HorizontalOptions="End"
+                                Margin="0, 0, 30, 0"
+                                VerticalOptions="Center"/>
 
                         <Button Text="✖"
-                             FontSize="14"
-                             BackgroundColor="Transparent"
-                             TextColor="Red"
-                             CommandParameter="{Binding .}"
-                             Clicked="OnDeleteFileClicked" 
-                             HorizontalOptions="End"
-                             VerticalOptions="Center"/>
+                                FontSize="14"
+                                BackgroundColor="Transparent"
+                                TextColor="Red"
+                                CommandParameter="{Binding .}"
+                                Clicked="OnDeleteFileClicked" 
+                                HorizontalOptions="End"
+                                VerticalOptions="Center"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
-
+        <Button Text="Загрузить новый файл"
+              FontSize="14"
+                Margin="10,20,0,0"
+                BackgroundColor="#FF0055"
+              TextColor="White"
+              HorizontalOptions="Center"
+              VerticalOptions="Start"
+              Clicked="OnUploadFileClicked" />
+    
     </StackLayout>
 
 </ContentPage>
